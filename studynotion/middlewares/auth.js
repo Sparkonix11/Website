@@ -41,7 +41,7 @@ exports.auth = async (req, res, next) => {
             message:"something went wrong while validating token",
         });
     }
-}
+};
 
 //isStudent
 
@@ -61,7 +61,7 @@ exports.isStudent = async (req, res, next) => {
             message: "User role can not be verified, please try again",
         });
     }
-}
+};
 
 //isInstructor
 
@@ -81,7 +81,7 @@ exports.isStudent = async (req, res, next) => {
             message: "User role can not be verified, please try again",
         });
     }
-}
+};
 
 //isAdmin
 
@@ -101,4 +101,4 @@ exports.isStudent = async (req, res, next) => {
             message: "User role can not be verified, please try again",
         });
     }
-}
+};

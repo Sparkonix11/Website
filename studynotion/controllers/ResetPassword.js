@@ -57,7 +57,7 @@ exports.resetPasswordToken = async (req, res) => {
             message: "Something went wrong with resetting your Password. Please try again"
         });
     }
-}
+};
 
 
 //resetPassword
@@ -123,4 +123,4 @@ exports.resetPassword = async(req, res) => {
             message: "something went wrong while sending reset mail"
         });
     }
-}
+};
