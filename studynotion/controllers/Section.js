@@ -29,7 +29,13 @@ exports.createSection = async (req, res) => {
                                                                 }
                                                             },
                                                             {new: true},
-                                                            );
+                                                            ).populate({
+                                                                path: "courseContent",
+                                                                populate: {
+                                                                    path: "subSection",
+                                                                },
+                                                            })
+                                                            .exec();
 
         // return res
 
@@ -70,7 +76,7 @@ exports.updateSection = async (req, res) => {
         //return res
         return res.status(200).json({
             success: true,
-            message: "Section Updated successfully",
+            message: section,
         });
     }
     catch(error){
@@ -86,7 +92,7 @@ exports.deleteSection = async (req, res) => {
     try {
         //get ID
 
-        const {sectionId} = req.params
+        const {sectionId} = req.params;
 
         //delete section
 

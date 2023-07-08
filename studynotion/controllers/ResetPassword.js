@@ -30,9 +30,10 @@ exports.resetPasswordToken = async (req, res) => {
         const updatedDetails = await User.findOneAndUpdate({email: email},
                                                             {
                                                                 token: token,
-                                                                resetPasswordExpires: Date.now() + 5*60*1000,
+                                                                resetPasswordExpires: Date.now() + 3600000,
                                                             },
                                                             {new:true});
+        console.log("DETAILS", updatedDetails);
 
         //Link generation
 
@@ -93,8 +94,8 @@ exports.resetPassword = async(req, res) => {
 
         //token validation
 
-        if (userDetails.resetPasswordExpires < Date.now()) {
-            return res.json({
+        if (userDetails.resetPasswordExpires > Date.now()) {
+            return res.status(403).json({
                 success: false,
                 message: "Token is expired. Please try again",
             });

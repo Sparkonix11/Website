@@ -40,13 +40,13 @@ exports.createSubSection = async (req, res) => {
                                                                 $push: {
                                                                     subSection: subSectionDetails._id,
                                                                     }   
-                                                                },{new: true});
+                                                                },{new: true}).populate("subSection");
 
         //return res
         return res.status(200).json({
             success: true,
             message: "SubSection created successfully",
-            updatedSection
+            data: updatedSection
         });
         
     } catch (error) {

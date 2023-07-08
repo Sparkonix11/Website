@@ -56,24 +56,18 @@ exports.deleteAccount = async(req, res) => {
         //get id
 
         const id = req.user.id;
-
-        //validation
-
-        const userDetails = await User.findById(id);
-        if(!userDetails){
-            return res.status(404).json({
-                success: false,
-                message: "User not found",
-            });
-        }
-
-        //delete Profile
-
-        await Profile.findByIdAndDelete({_id: userDetails.additionalDetails});
-
-        //delete User
-
-        await User.findByIdAndDelete({_id: id});
+		const user = await User.findById({ _id: id });
+		if (!user) {
+			return res.status(404).json({
+				success: false,
+				message: "User not found",
+			});
+		}
+		// Delete Assosiated Profile with the User
+		await Profile.findByIdAndDelete({ _id: user.userDetails });
+		// TODO: Unenroll User From All the Enrolled Courses
+		// Now Delete User
+		await user.findByIdAndDelete({ _id: id });
 
         //return res
 
@@ -106,6 +100,7 @@ exports.getAllUserDetails = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "User data fetched successfully",
+            data: userDetails,
         });
     } catch (error) {
         return res.status(500).json({

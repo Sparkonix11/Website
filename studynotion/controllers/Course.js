@@ -1,30 +1,34 @@
 const Course = require("../models/Course");
-const Tag = require("../models/Tags");
+const Category = require("../models/Category");
 const User = require("../models/User");
 const {uploadImageToCloudinary} = require('../utils/imageUploader');
-require('dotenv').process();
+
 
 //create handler function
 exports.createCourse = async(req, res) => {
     try{
+
         //fetch data
-        const {courseName, courseDescription, whatYouWillLearn, price, tag} = req.body;
+        let {courseName, courseDescription, whatYouWillLearn, price, tag, category, status, instructions,} = req.body;
 
         //get thumbnail
         const thumbnail = req.files.thumbnailImage;
 
         //validation
 
-        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag || !thumbnail){
+        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag || !thumbnail || !cate){
             return res.status(400).json({
                 success: false,
                 message: "All fields are required",
             });
         }
+        if (!status || status === undefined) {
+			status = "Draft";
+		}
 
         //check for instructor
         const userId = req.user.id;
-        const instructorDetails = await User.findById(userId);
+        const instructorDetails = await User.findById(userId,  {accountType: "Instructor",});
         console.log("Instructor details: ", instructorDetails);
 
         if(!instructorDetails){
@@ -35,8 +39,8 @@ exports.createCourse = async(req, res) => {
         }
 
         //check given tag is valid or not
-        const tagDetails = await Tag.findById(tag);
-        if(!tagDetails){
+        const categoryDetails = await Category.findById(category);
+        if(!categoryDetails){
             return res.status(404).json({
                 success: false,
                 message: "Tag Details not found",
@@ -49,13 +53,16 @@ exports.createCourse = async(req, res) => {
         //create new course
 
         const newCourse = await Course.create({
-            courseName, 
-            courseDescription,
-            instructor: instructorDetails._id,
-            whatYouWillLearn,
-            price,
-            tag: tagDetails._id,
-            thumbnail: thumbnailImage.secure_url, 
+            courseName,
+			courseDescription,
+			instructor: instructorDetails._id,
+			whatYouWillLearn: whatYouWillLearn,
+			price,
+			tag: tag,
+			category: categoryDetails._id,
+			thumbnail: thumbnailImage.secure_url,
+			status: status,
+			instructions: instructions,
         });
 
         //add new course to schema
@@ -89,7 +96,7 @@ exports.createCourse = async(req, res) => {
 };
 
 //get all courses
-exports.showAllCourses = async(req, res) => {
+exports.getAllCourses = async(req, res) => {
     try{
         const allCourses = await Course.find({}, {courseName: true,
                                                 price: true,
