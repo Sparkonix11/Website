@@ -87,7 +87,7 @@ exports.signUp = async (req, res) => {
         } = req.body;
 
         //validate data
-        if(!firstName || !lastName || !email || !password || !confirmPassword || !accountType || !otp) {
+        if(!firstName || !lastName || !email || !password || !confirmPassword || !otp) {
             return res.status(403).json({
                 success: false,
                 message: "All Fields are necessary"
@@ -134,6 +134,10 @@ exports.signUp = async (req, res) => {
         //Hash password
 
         const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create the user
+		let approved = "";
+		approved === "Instructor" ? (approved = false) : (approved = true);
 
         //create entry in DB
 
