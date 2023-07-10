@@ -35,9 +35,14 @@ const courseSchema = mongoose.Schema({
         type: String,
     },
     tag: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Tag"
+        type: [String],
+        required: true,
     },
+    category: {
+		type: mongoose.Schema.Types.ObjectId,
+		// required: true,
+		ref: "Category",
+	},
     studentsEnrolled: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -45,7 +50,13 @@ const courseSchema = mongoose.Schema({
             ref: "User",
         }
     ],
-
+    instructions: {
+		type: [String],
+	},
+	status: {
+		type: String,
+		enum: ["Draft", "Published"],
+	},
 });
 
 module.exports = mongoose.model("Course", courseSchema);

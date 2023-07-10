@@ -4,7 +4,6 @@ const User = require("../models/User");
 const mailSender = require("../utils/mailSender");
 const {courseEnrollmentEmail} = require('../mail/templates/courseEnrollmentEmail');
 const { default: mongoose } = require("mongoose");
-const { default: webhooks } = require("razorpay/dist/types/webhooks");
 
 exports.capturePayment = async (req, res) => {
     //get courseId and UserId
@@ -112,7 +111,7 @@ exports.verifySignature = async (req, res) => {
             }
             console.log(enrolledCourse);
 
-            const enrolledStudent = Course.findByIdAndUpdate(
+            const enrolledStudent = await User.findByIdAndUpdate(
                                                             {_id: userId},
                                                             {$push: {courses: courseId}},
                                                             {new: true},

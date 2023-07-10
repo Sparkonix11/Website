@@ -25,6 +25,14 @@ const userSchema = mongoose.Schema({
         enum: ["Admin", "Student","Instructor"],
         required: true,
     },
+    active: {
+        type: Boolean,
+        default: true,
+    },
+    approved: {
+        type: Boolean,
+        default: true,
+    },
     additionalDetails: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -44,10 +52,12 @@ const userSchema = mongoose.Schema({
     resetPasswordExpires: {
         type: Date,
     },
-    courseProgess: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-    },
+    courseProgress: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "courseProgress",
+        },
+    ],
 });
 
 module.exports = mongoose.model("User", userSchema);
